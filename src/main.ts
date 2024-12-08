@@ -1,20 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import { RequestMethod } from '@nestjs/common';
 import { setEnvironmentPrefix } from './shared/utils/setEnvironmentPrefix';
-import { useContainer } from 'class-validator';
+import { ConfigService } from '@nestjs/config';
+import { swaggerStart } from './documentation/swagger.doc';
 
-async function bootstrap() {
+async function bootstrap(configService: ConfigService) {
   const app = await NestFactory.create(AppModule);
-  const prefix = setEnvironmentPrefix(process.env.NODE_ENV);
+  const prefix = setEnvironmentPrefix(configService.get<string>('NODE_ENV'));
 
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
-
-  app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  swaggerStart(app);
   app.setGlobalPrefix(`${prefix}/api`, {
-    exclude: [{ path: '/', method: RequestMethod.GET}],
+    exclude: [{ path: '/', method: RequestMethod.GET }],
   });
-  await app.listen(process.env.NODE_PORT ?? 3000);
+  app.enableCors();
+
+  await app.listen(configService.get<number>('NODE_PORT') || 3000, () => {
+    console.log(
+      `Application Running on port ${configService.get<number>('NODE_PORT') || 3000} ✅`,
+    );
+  });
 }
-bootstrap();
+bootstrap(new ConfigService());
