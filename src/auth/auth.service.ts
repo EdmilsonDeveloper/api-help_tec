@@ -42,18 +42,18 @@ export class AuthService {
     auth.created_at = new Date();
     auth.updated_at = new Date();
     try {
-      const userAlreadyExists: any = {};
+      const userAlreadyExists = await this.userService.get({ email: body.email });;
       if (!userAlreadyExists) {
         throw new UnauthorizedException('Email ou senha inválidos');
       }
 
       const isPasswordValid = await bcrypt.compare(
-        body.password,
-        userAlreadyExists.password,
+        body.senha,
+        userAlreadyExists.senha,
       );
 
       if (!isPasswordValid) {
-        throw new UnauthorizedException('Usuário ou senha incorretos');
+        throw new UnauthorizedException('Email ou senha inválidos');
       }
 
       const activeSession = await this.userService.get({
