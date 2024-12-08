@@ -1,40 +1,54 @@
-import { Column, CreatedAt, DataType, Default, Model, PrimaryKey, Sequelize, Table, UpdatedAt } from "sequelize-typescript";
-import { Usuarios } from "./user.model";
+import {
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  Model,
+  PrimaryKey,
+  Sequelize,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Usuarios } from './user.model';
 
 @Table({
-    tableName: 'secao',
-    timestamps: false
+  tableName: 'secao',
+  timestamps: false,
 })
 export class Secao extends Model<Secao> {
-    @PrimaryKey
-    @Default(Sequelize.literal('uuid_generate_v4()'))
-    @Column(DataType.UUID)
-    id_secao: string;
+  @PrimaryKey
+  @Default(Sequelize.literal('uuid_generate_v4()'))
+  @Column(DataType.UUID)
+  id_secao: string;
 
-    @Column(DataType.STRING)
-    token: string;
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
+  token: string;
 
-    @Default(true)
-    @Column(DataType.BOOLEAN)
-    ativo: boolean;
+  @Default(true)
+  @Column(DataType.BOOLEAN)
+  ativo: boolean;
 
-    @Column({
-        type: DataType.UUID,
-        references: {
-            model: Usuarios,
-            key: 'id_usuario'
-        }
-    })
-    id_usuario: string;
+  @Column({
+    type: DataType.UUID,
+    references: {
+      model: Usuarios,
+      key: 'id_usuario',
+    },
+  })
+  id_usuario: string;
 
-    @Column(DataType.STRING(10))
-    plataforma: string;
+  @Column(DataType.STRING(10))
+  plataforma: string;
 
-    @CreatedAt
-    @Column(DataType.DATE)
-    created_at: Date;
+  @CreatedAt
+  @Column(DataType.DATE)
+  created_at: Date;
 
-    @UpdatedAt
-    @Column(DataType.DATE)
-    updated_at: Date;
+  @UpdatedAt
+  @Column(DataType.DATE)
+  updated_at: Date;
 }

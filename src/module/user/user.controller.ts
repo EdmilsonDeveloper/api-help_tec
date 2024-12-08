@@ -1,7 +1,8 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -18,5 +19,14 @@ export class UserController {
       message: 'Usuário encontrado com sucesso',
       data: user,
     };
+  }
+
+  @Post()
+  async create(@Body() body: CreateUserDto) {
+    await this.userService.create(body);
+    return {
+      statusCode: 201,
+      message: 'Usuário criado com sucesso',
+    }
   }
 }

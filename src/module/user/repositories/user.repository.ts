@@ -19,4 +19,13 @@ export class UserRepository implements UserContract {
       throw error;
     }
   }
+
+  async create(user: User): Promise<User> {
+    try {
+      return await this.model.create(user);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }

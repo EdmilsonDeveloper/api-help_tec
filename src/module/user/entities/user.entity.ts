@@ -16,4 +16,6 @@ export class User {
   noturno: boolean;
   cliente: boolean;
   id_plano_adesao: string;
+  created_at: Date;
+  updated_at: Date;
 }
