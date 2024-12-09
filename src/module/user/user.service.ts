@@ -3,6 +3,7 @@ import { UserRepository } from './repositories/user.repository';
 import { User } from './entities/user.entity';
 import { userQueryOptions } from './repositories/user.contract';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -77,6 +78,15 @@ export class UserService {
       }
 
       return await this.repository.create(user);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async update(id_usuario: string, update: UpdateUserDto): Promise<number[]> {
+    try {
+      return await this.repository.update(id_usuario, update);
     } catch (error) {
       console.log(error);
       throw error;

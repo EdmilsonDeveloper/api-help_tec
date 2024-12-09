@@ -7,6 +7,7 @@ export class CreateUserDto {
   nome: string;
 
   @IsString()
+  @IsOptional()
   genero?: string;
 
   @IsString()

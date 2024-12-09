@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -29,4 +30,23 @@ export class UserController {
       message: 'Usuário criado com sucesso',
     }
   }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    await this.userService.update(id, body);
+    return {
+      statusCode: 200,
+      message: 'Usuário atualizado com sucesso',
+    }
+  }
+
+  @Delete(':id')
+  async softDelete(@Param('id') id: string) {
+    await this.userService.update(id, { ativo: false });
+    return {
+      statusCode: 200,
+      message: 'Usuário Apagado com sucesso',
+    }
+  }
+  
 }
