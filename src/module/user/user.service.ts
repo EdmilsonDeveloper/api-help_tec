@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from './repositories/user.repository';
 import { User } from './entities/user.entity';
 import { userQueryOptions } from './repositories/user.contract';
@@ -44,6 +49,20 @@ export class UserService {
     user.created_at = new Date();
     user.updated_at = new Date();
     try {
+      const today = new Date();
+      const birthDate = new Date(user.data_nascimento);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const hasNotHadBirthday =
+        today.getMonth() < birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() &&
+          today.getDate() < birthDate.getDate());
+      if (hasNotHadBirthday) {
+        age--;
+      }
+      if (age < 18) {
+        throw new BadRequestException('Usuário menor de idade');
+      }
+
       const cpfAlreadyExists = await this.repository.get({ cpf: user.cpf });
       if (cpfAlreadyExists) {
         throw new BadRequestException('CPF ja cadastrado');
@@ -54,7 +73,9 @@ export class UserService {
         throw new BadRequestException('RG ja cadastrado');
       }
 
-      const emailAlreadyExists = await this.repository.get({ email: user.email });
+      const emailAlreadyExists = await this.repository.get({
+        email: user.email,
+      });
       if (emailAlreadyExists) {
         throw new BadRequestException('Email ja cadastrado');
       }
@@ -72,7 +93,6 @@ export class UserService {
       if (!user.cliente && user.prestador === true) {
         user.cliente = false;
       }
-
       if (user.cliente === false) {
         delete user.id_plano_adesao;
       }

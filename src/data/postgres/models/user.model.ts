@@ -24,7 +24,7 @@ export class Usuarios extends Model<Usuarios> {
   @Column(DataType.BOOLEAN)
   ativo: boolean;
 
-  @Column(DataType.STRING)
+  @Column({type: DataType.STRING(100), allowNull: false})
   nome: string;
 
   @Default('I')
@@ -46,28 +46,28 @@ export class Usuarios extends Model<Usuarios> {
   rg: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(150),
     unique: true,
     allowNull: false,
   })
   email: string;
 
-  @Column(DataType.STRING(100))
+  @Column({type: DataType.STRING(100), allowNull: false})
   senha: string;
 
-  @Column(DataType.DATE)
+  @Column({type: DataType.DATE, allowNull: false})
   data_nascimento: Date;
 
-  @Column(DataType.STRING)
+  @Column(DataType.STRING(11))
   telefone: string;
 
-  @Column(DataType.STRING)
+  @Column(DataType.STRING(20))
   celular: string;
 
-  @Column(DataType.STRING)
+  @Column({type: DataType.STRING(255), allowNull: false})
   endereco_1: string;
 
-  @Column(DataType.STRING)
+  @Column(DataType.STRING(255))
   endereco_2: string;
 
   @Column(DataType.BOOLEAN)
@@ -84,7 +84,7 @@ export class Usuarios extends Model<Usuarios> {
   id_plano_adesao: string;
 
   @CreatedAt
-  @Column(DataType.DATE)
+  @Column({type: DataType.DATE, allowNull: false})
   created_at: Date;
 
   @UpdatedAt

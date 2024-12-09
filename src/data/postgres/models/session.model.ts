@@ -22,7 +22,7 @@ export class Secao extends Model<Secao> {
   id_secao: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(255),
     unique: true,
     allowNull: false,
   })
@@ -41,11 +41,11 @@ export class Secao extends Model<Secao> {
   })
   id_usuario: string;
 
-  @Column(DataType.STRING(10))
+  @Column({type: DataType.STRING(10), allowNull: false})
   plataforma: string;
 
   @CreatedAt
-  @Column(DataType.DATE)
+  @Column({type: DataType.DATE, allowNull: false})
   created_at: Date;
 
   @UpdatedAt
